@@ -3,7 +3,7 @@ Oyster Journey
 
 This class is a simple scraper class that allows for users of the TFL Oyster website to scrape their journey information and access it as a nice array.
 
-I have a live example [here](http://ollieread.com/labs/oyster-journey/).
+I have a live example [here](http://ollieread.com/oyster/).
 
 In total the class took me around an hour, so I apologise if it seems overly hacky but scraping is not as easy as one would like it to be.
 
