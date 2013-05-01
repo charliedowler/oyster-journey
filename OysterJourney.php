@@ -15,27 +15,77 @@
  */
 
 class OysterJourney {
-    private $_username = ''; // your oyster tfl username
-    private $_password = ''; // your oyster tfl password
-    private $_cookie_file = ''; // absolute path to a text file to be used to save the cookie in
+    private $_username; // your oyster tfl username
+    private $_password; // your oyster tfl password
+    private $_cookie_file; // absolute path to a text file to be used to save the cookie in
     private $_success = false;
     private $_order_journey = 'desc';
     private $_order_all = 'desc';
     /**
-     * Do some lovely validation so that we can check to make sure everythig is 
-     * provided, then attmept the login and grab the cookie
-     * 
+     * Does nothing now as it's all been moved to OysterJourney::loginAndGetCookie()
+     */
+    public function __construct() { }
+
+    /**
+     * Sets the username
+     * @param $username string
+     */
+    public function setUsername($username) {
+        $this->_username = $username;
+    }
+
+    /**
+     * Sets the password
+     * @param $password string
+     */
+    public function setPassword($password) {
+        $this->_password = $password;
+    }
+
+    /**
+     * Sets the cookie file location
+     * @param $cookie string
+     */
+    public function setCookie($cookie) {
+        $this->_cookie_file = $cookie;
+    }
+
+    /**
+     * Sets the order the journey data should return in
+     */
+    public function setJourneyDesc() {
+        $this->_order_journey = 'desc';
+    }
+
+    /**
+     * Sets the order all the data should return in
+     */
+    public function setJourneyAsc() {
+        $this->_order_journey = 'asc';
+    }
+
+    public function setAllDesc() {
+        $this->_order_all = 'desc';
+    }
+
+    public function setAllAsc() {
+        $this->_order_all = 'asc';
+    }
+    /**
+     * Take the information previously provided and grabs the cookie so that we can scrape
+     * the journey data
+     *
      * @throws Exception 
      */
-    public function __construct() {
+    public function loginAndGetCookie() {
         $username = $this->_username;
         $password = $this->_password;
+        $cookie_file = $this->_cookie_file;
+
         if(!empty($username) && !empty($password)) {
             $cookie_file = $this->_cookie_file;
             if(!empty($cookie_file) && is_file($cookie_file)) {
-                if(is_writable($cookie_file)) {
-                    $this->loginAndGetCookie($username, $password, $cookie_file);
-                } else {
+                if(!is_writable($cookie_file)) {
                     throw new Exception('SHIT AINT WRITABLE');
                 }
             } else {
@@ -44,18 +94,9 @@ class OysterJourney {
         } else {
             throw new Exception('HOW DO YOU THINK WE WILL LOGIN AS YOU IDIOT?');
         }
-    }
-    /**
-     * Take the information provided and grab the cookie so that we can scrape
-     * the journey data
-     * 
-     * @param string $username
-     * @param string $password
-     * @param string $cookie_file
-     * @throws Exception 
-     */
-    private function loginAndGetCookie($username, $password, $cookie_file) {
+
         $curl = curl_init();
+
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_URL, 'https://oyster.tfl.gov.uk/oyster/security_check');
         curl_setopt($curl, CURLOPT_REFERER, 'https://oyster.tfl.gov.uk/oyster/entry.do');
@@ -71,7 +112,9 @@ class OysterJourney {
         )));
         curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file);
         curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_file);
+
         $return = curl_exec($curl);
+
         if(preg_match("/Login failed\. Please check your username and password and try again\./", $return, $matches) !== 0) {
             throw new Exception('WRONG CREDENTIALS BITCH TITS');
         } else {
