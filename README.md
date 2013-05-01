@@ -18,6 +18,11 @@ require_once 'OysterJourney.php';
 try {
     // grab it
     $OysterJourney = new OysterJourney();
+    $OysterJourney->setUsername('');
+    $OysterJourney->setPassword('');
+    $OysterJourney->setCookie('');
+
+    $OysterJourney->loginAndGetCookie();
     // check its status
     if($OysterJourney->didItWork() === true) {
         // get the journey info
