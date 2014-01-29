@@ -98,17 +98,19 @@ class OysterJourney {
         $curl = curl_init();
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_URL, 'https://oyster.tfl.gov.uk/oyster/security_check');
+        curl_setopt($curl, CURLOPT_URL, 'https://account.tfl.gov.uk/Oyster/');
         curl_setopt($curl, CURLOPT_REFERER, 'https://oyster.tfl.gov.uk/oyster/entry.do');
         curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)");
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array(
-            'j_username' => $username,
-            'j_password' => $password,
-            'Sign In'    => 'Sign In'
+        curl_setopt($curl, CURLOPT_POST, 1);        
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array(            
+            'UserName'  => $username,
+            'Password'  => $password,
+            'ReturnUrl' => 'https://oyster.tfl.gov.uk/oyster/security_check',
+            'AppId'     => '8ead5cf4-4624-4389-b90c-b1fd1937bf1f',
+            'Sign In'   => 'Sign In'
         )));
         curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file);
         curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_file);
